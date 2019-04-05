@@ -18,19 +18,11 @@
         <b-list-group-item
           v-for="feature in features"
           v-bind:key="feature.id">
-          <input
-            type="text"
-            v-bind:value="feature.name"
-            v-bind:class="{ editable: !feature.editable }"
-            v-on:dblclick="updateFeature(id, feature.id, { editable: true })"
-            v-on:change="updateFeature(id, feature.id, { name: $event.target.value })"
-            v-bind:readonly="!feature.editable">
-          <b-button
-            v-on:click="deleteFeature(id, feature.id)"
-            size="sm"
-            variant="info">
-            X
-          </b-button>
+          <Feature
+            v-bind:feature="feature"
+            v-bind:entityId="id"
+            v-on:updateFeature="updateFeature"
+            v-on:deleteFeature="deleteFeature"/>
         </b-list-group-item>
         <b-list-group-item
           v-on:click="handleCreateFeature(id)"
@@ -43,12 +35,15 @@
 </template>
 
 <script>
+import Feature from './FeatureComponent.vue'
+
 export default {
   props: {
     id: String,
     name: String,
     features: Array
   },
+  components: { Feature },
   data () {
     return {
       editable: false
@@ -58,25 +53,19 @@ export default {
     setEditable (value) {
       this.editable = typeof value === 'undefined' ? !this.editable : !!value
     },
-
     changeName (e, id) {
       this.$emit('updateEntity', { id, update: { name: e.target.value } })
       this.editable = false
     },
-
     deleteEntity (id) {
       this.$emit('deleteEntity', { id })
     },
-
-    updateFeature (entityId, featureId, update) {
-      if (typeof update.editable === 'undefined') update.editable = false
-      this.$emit('updateFeature', { entityId, featureId, update })
+    updateFeature (payload) {
+      this.$emit('updateFeature', payload)
     },
-    
-    deleteFeature (entityId, featureId) {
-      this.$emit('deleteFeature', { entityId, featureId })
+    deleteFeature (payload) {
+      this.$emit('deleteFeature', payload)
     },
-
     handleCreateFeature (id) {
       this.$store.commit('createFeature', {
         entityId: id
