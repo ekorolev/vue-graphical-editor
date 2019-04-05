@@ -1,4 +1,4 @@
-# entities-upwork
+# Vue Graphical Editor
 
 ## Project setup
 ```
