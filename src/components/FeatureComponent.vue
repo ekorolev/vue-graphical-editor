@@ -4,7 +4,7 @@
       type="text"
       v-bind:value="feature.name"
       v-bind:class="{ editable: !feature.editable }"
-      v-on:dblclick="handleUpdateFeature(entityId, feature.id, { editable: true })"
+      v-on:dblclick="handleUpdateFeature(entityId, feature.id, { editable: true }, $event)"
       v-on:change="handleUpdateFeature(entityId, feature.id, { name: $event.target.value })"
       v-bind:readonly="!feature.editable">
     <b-button
@@ -23,8 +23,12 @@ export default {
     entityId: String
   },
   methods: {
-    handleUpdateFeature (entityId, featureId, update) {
-      if (typeof update.editable === 'undefined') update.editable = false
+    handleUpdateFeature (entityId, featureId, update, event) {
+      if (typeof update.editable === 'undefined') {
+        update.editable = false
+      } else {
+        event.target.select()
+      }
       this.$emit('updateFeature', { entityId, featureId, update })
     },
     handleDeleteFeature (entityId, featureId) {

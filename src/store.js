@@ -6,16 +6,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    entities: [{
-      id: uuid4(),
-      name: 'Entity #1',
-      features: [{
-        id: uuid4(),
-        name: 'Feature #1'
-      }]
-    }]
+    entities: []
   },
   mutations: {
+    // Add entity to the list
     createEntity (state) {
       state.entities.push({
         id: uuid4(),
@@ -24,10 +18,12 @@ export default new Vuex.Store({
       })
     },
 
+    // Delete entity by id
     deleteEntity (state, payload) {
       state.entities = state.entities.filter(e => e.id !== payload.id)
     },
 
+    // Update entity by id
     updateEntity (state, payload) {
       state.entities = state.entities.map(e => {
         if (e.id !== payload.id) return e
@@ -36,6 +32,7 @@ export default new Vuex.Store({
       console.log(state.entities)
     },
 
+    // Create feature for particular entity
     createFeature (state, payload) {
       state.entities = state.entities.map(e => {
         if (e.id !== payload.entityId) return e
@@ -48,6 +45,7 @@ export default new Vuex.Store({
       })
     },
 
+    // Update specific feature for particular entity
     updateFeature (state, payload) {
       state.entities = state.entities.map(e => {
         if (e.id !== payload.entityId) return e
@@ -60,6 +58,7 @@ export default new Vuex.Store({
       })
     },
 
+    // Delete specific feature from entity feature list
     deleteFeature (state, payload) {
       state.entities = state.entities.map(e => {
         if (e.id !== payload.entityId) return e
@@ -67,8 +66,5 @@ export default new Vuex.Store({
         return e
       })
     }
-  },
-  actions: {
-
   }
 })

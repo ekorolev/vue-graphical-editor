@@ -5,7 +5,7 @@
         type="text"
         v-bind:value="name"
         v-bind:class="{ editable: !editable }"
-        v-on:dblclick="setEditable(true)"
+        v-on:dblclick="setEditable(true, $event)"
         v-on:change="changeName($event, id)"
         v-bind:readonly="!editable">
       <b-button
@@ -50,8 +50,9 @@ export default {
     }
   },
   methods: {
-    setEditable (value) {
+    setEditable (value, event) {
       this.editable = typeof value === 'undefined' ? !this.editable : !!value
+      event.target.select()
     },
     changeName (e, id) {
       this.$emit('updateEntity', { id, update: { name: e.target.value } })

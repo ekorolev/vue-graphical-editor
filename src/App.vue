@@ -28,13 +28,11 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'app',
+  // Add entities to the app
   computed: {
     ...mapState({
       entities: state => state.entities
     })
-  },
-  mounted () {
-    console.log(this.entities)
   },
   components: { Entity },
   methods: {
