@@ -6,11 +6,18 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    enteties: []
+    entities: [{
+      id: uuid4(),
+      name: 'Entity #1',
+      features: [{
+        id: uuid4(),
+        name: 'Feature #1'
+      }]
+    }]
   },
   mutations: {
     createEntity (state) {
-      state.enteties.push({
+      state.entities.push({
         id: uuid4(),
         name: 'New entity',
         features: []
@@ -18,42 +25,46 @@ export default new Vuex.Store({
     },
 
     deleteEntity (state, payload) {
-      state.enteties = state.enteties.filter(e => e.id !== payload.id)
+      state.entities = state.entities.filter(e => e.id !== payload.id)
     },
 
-    editEntity (state, payload) {
-      state.enteties = state.enteties.map(e => {
+    updateEntity (state, payload) {
+      state.entities = state.entities.map(e => {
         if (e.id !== payload.id) return e
         return { ...e, ...payload.update }
       })
+      console.log(state.entities)
     },
 
     createFeature (state, payload) {
-      state.enteties = state.enteties.map(e => {
+      state.entities = state.entities.map(e => {
         if (e.id !== payload.entityId) return e
         e.features.push({
           id: uuid4(),
-          name: 'New feature'
+          name: 'New feature',
+          editable: false
         })
         return e
       })
     },
 
     updateFeature (state, payload) {
-      state.enteties = state.enteties.map(e => {
+      state.entities = state.entities.map(e => {
         if (e.id !== payload.entityId) return e
         e.features = e.features.map(f => {
           if (f.id !== payload.featureId) return f
           f = { ...f, ...payload.update }
           return f
         })
+        return e
       })
     },
 
     deleteFeature (state, payload) {
-      state.enteties = state.enteties.map(e => {
+      state.entities = state.entities.map(e => {
         if (e.id !== payload.entityId) return e
         e.features = e.features.filter(f => f.id !== payload.featureId)
+        return e
       })
     }
   },
